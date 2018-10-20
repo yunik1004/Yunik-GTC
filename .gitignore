@@ -1,3 +1,10 @@
+# Text editor
+.vs/
+.vscode/
+
+# Build
+build/
+
 # Prerequisites
 *.d
 
