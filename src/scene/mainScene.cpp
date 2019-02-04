@@ -1,4 +1,4 @@
-#include "mainScene.h"
+#include "mainScene.hpp"
 
 namespace YUNIK_GTC {
     void mainScene::keyCallback(GLFWwindow *window, int key, int scancode, int action, int mods) {

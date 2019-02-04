@@ -2,7 +2,7 @@
 
 #include <gl/glew.h>
 #include <GLFW/glfw3.h>
-#include "scene.h"
+#include "scene.hpp"
 
 #define YUNIK_GTC_DEFAULT_WINDOW_NAME "Yunik-GTC"
 #define YUNIK_GTC_DEFAULT_WINDOW_WIDTH 960

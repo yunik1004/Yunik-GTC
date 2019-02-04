@@ -7,13 +7,13 @@
 #include <iostream>
 #include <gl/glew.h>
 #include <GLFW/glfw3.h>
-#include "lib/window.h"
-#include "scene/mainScene.h"
+#include "lib/window.hpp"
+#include "scene/mainScene.hpp"
 
 static void errorCallback(int errorCode, const char *errorDescription);
 
 int main (int argc, char *argv[]) {
-    glfwSetErrorCallback(errorCallback);
+	glfwSetErrorCallback(errorCallback);
 
 	/* Initialize glfw */
 	if (!glfwInit()) {

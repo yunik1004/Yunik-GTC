@@ -1,6 +1,6 @@
 #include <cmath>
 #include <iostream>
-#include "window.h"
+#include "window.hpp"
 
 namespace YUNIK_GTC {
     /* Initialization */

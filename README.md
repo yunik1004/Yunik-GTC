@@ -5,38 +5,21 @@ Yunik Game Template for C++
 This is the template for the game using C++
 
 ## Prerequisites
-- CMake (>=3.8)
+- CMake
+- Ninja
 
-## Required libraries
+## External Dependencies
 - OpenGL
-- GLFW3
 - GLEW
-- GLM
 
 ## Build
 
-### Windows
-
-#### MinGW
-
-```powershell
-> mkdir build
-> cd build
-> cmake .. -G "MinGW Makefiles"
-> mingw32-make
+```bash
+mkdir build
+cd build
+cmake .. -G Ninja -DCMAKE_BUILD_TYPE=RELEASE
+ninja
 ```
 
-#### Visual Studio & Cmake
-
-```powershell
-> mkdir build
-> cd build
-> cmake .. -G "Visual Studio 15 Win64"
-> cmake --build . --config Release
-```
-
-### Linux
-To be continue...
-
-### Mac
-To be continue...
+## Contributions
+* [**yunik1004**](https://github.com/yunik1004) - *Initial work*

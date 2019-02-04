@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../lib/scene.h"
+#include "../lib/scene.hpp"
 
 namespace YUNIK_GTC {
     class mainScene : public Scene {
