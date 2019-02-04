@@ -43,8 +43,8 @@ namespace YUNIK_GTC {
             exit(EXIT_FAILURE);
         }
 
-        if (!GLEW_VERSION_4_3) {
-            std::cerr << "OpenGL 4.3 API is not avaliable." << std::endl;
+        if (!GLEW_VERSION_4_4) {
+            std::cerr << "OpenGL 4.4 API is not avaliable." << std::endl;
             glfwDestroyWindow(window);
             window = nullptr;
             glfwTerminate();
@@ -67,7 +67,7 @@ namespace YUNIK_GTC {
         scene = nullptr;
     }
 
-    void Window::windowSizeCallback(GLFWwindow *window, int w, int h) {
+    void Window::windowSizeCallback(GLFWwindow* window, int w, int h) {
         GLfloat widthFactor = (GLfloat)w / (GLfloat)YUNIK_GTC_DEFAULT_WINDOW_WIDTH;
         GLfloat heightFactor = (GLfloat)h / (GLfloat)YUNIK_GTC_DEFAULT_WINDOW_HEIGHT;
 
