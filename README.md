@@ -7,10 +7,10 @@ This is the template for the game using C++
 ## Prerequisites
 - CMake
 - Ninja
+- Clang
 
 ## External Dependencies
 - OpenGL
-- GLEW
 
 ## Build
 

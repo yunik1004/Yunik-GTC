@@ -7,3 +7,6 @@
 [submodule "submodules/glew"]
 	path = submodules/glew
 	url = https://github.com/Perlmint/glew-cmake.git
+[submodule "submodules/soloud"]
+	path = submodules/soloud
+	url = https://github.com/jarikomppa/soloud.git
