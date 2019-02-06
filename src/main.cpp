@@ -13,35 +13,35 @@
 static void errorCallback(int errorCode, const char* errorDescription);
 
 int main (int argc, char* argv[]) {
-	glfwSetErrorCallback(errorCallback);
+    glfwSetErrorCallback(errorCallback);
 
-	/* Initialize glfw */
-	if (!glfwInit()) {
+    /* Initialize glfw */
+    if (!glfwInit()) {
         fprintf(stderr, "Error: Fail to initialize GLFW");
-		exit(EXIT_FAILURE);
-	}
+        exit(EXIT_FAILURE);
+    }
 
     /* OpenGL version : 4.4 */
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4);
 
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
     /* Create window */
-	YUNIK_GTC::Window::setInstance();
-	YUNIK_GTC::Window::setWindowPos_middle();
-	
-	/* Rendering session */
-	YUNIK_GTC::Window::setScene(new YUNIK_GTC::mainScene());
-	YUNIK_GTC::Window::render();
+    YUNIK_GTC::Window::setInstance();
+    YUNIK_GTC::Window::setWindowPos_middle();
+    
+    /* Rendering session */
+    YUNIK_GTC::Window::setScene(new YUNIK_GTC::mainScene());
+    YUNIK_GTC::Window::render();
 
-	/* Terminate session */
-	YUNIK_GTC::Window::purgeInstance();
+    /* Terminate session */
+    YUNIK_GTC::Window::purgeInstance();
     glfwTerminate();
     return EXIT_SUCCESS;
 }
 
 static void errorCallback(int errorCode, const char* errorDescription) {
-	fprintf(stderr, "Error: %s\n", errorDescription);
+    fprintf(stderr, "Error: %s\n", errorDescription);
 }

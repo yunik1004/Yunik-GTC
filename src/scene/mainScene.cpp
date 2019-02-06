@@ -7,7 +7,7 @@ namespace YUNIK_GTC {
 
     mainScene::mainScene(void) {
         /* Background color - white */
-	    glClearColor(1.0, 1.0 , 1.0, 0.0);
+        glClearColor(1.0, 1.0 , 1.0, 0.0);
     }
 
     mainScene::~mainScene(void) {
