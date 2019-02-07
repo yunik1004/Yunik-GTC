@@ -11,7 +11,13 @@ namespace YUNIK_GTC {
     Scene* Window::scene = nullptr;
     /* Initialization end */
 
-    Window::Window(const char* name, int width, int height) {
+    Window::Window(const char* name, int width, int height, bool resizable) {
+        /* Resizability */
+        glfwWindowHint(GLFW_RESIZABLE, resizable ? GLFW_TRUE : GLFW_FALSE);
+
+        /* Anti-aliasing */
+        glfwWindowHint(GLFW_SAMPLES, 4);
+
         /* Window size, name */
         window = glfwCreateWindow(width, height, name, nullptr, nullptr);
         if(window == nullptr) {
@@ -19,21 +25,17 @@ namespace YUNIK_GTC {
             exit(EXIT_FAILURE);
         }
 
-        /* Anti-aliasing */
-        glfwWindowHint(GLFW_SAMPLES, 4);
-
-        /* Resizability */
-        glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
         glfwSetWindowAspectRatio(window, width, height);
+        if (resizable) {
+            /* Size callback */
+            glfwSetWindowSizeCallback(window, &windowSizeCallback);
+        }
 
         glfwMakeContextCurrent(window);
         glClearColor(0, 0, 0, 1);
 
         /* FPS limit: 60 */
         glfwSwapInterval(1);
-
-        /* Size callback */
-        glfwSetWindowSizeCallback(window, &windowSizeCallback);
 
         /* Initialize glew */
         GLenum errorCode = glewInit();
@@ -95,14 +97,14 @@ namespace YUNIK_GTC {
 
     Window* Window::Instance(void) {
         if(instance == nullptr) {
-            instance = new Window();
+            setInstance();
         }
         return instance;
     }
 
-    void Window::setInstance(const char* name, int width, int height) {
+    void Window::setInstance(const char* name, int width, int height, bool resizable) {
         if(instance == nullptr) {
-            instance = new Window(name, width, height);
+            instance = new Window(name, width, height, resizable);
         }
     }
 

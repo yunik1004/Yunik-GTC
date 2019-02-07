@@ -11,9 +11,7 @@
 namespace YUNIK_GTC {
     class Window {
     private:
-        Window(const char* name = YUNIK_GTC_DEFAULT_WINDOW_NAME,
-               int width = YUNIK_GTC_DEFAULT_WINDOW_WIDTH,
-               int height = YUNIK_GTC_DEFAULT_WINDOW_HEIGHT);
+        Window(const char* name, int width, int height, bool resizable);
         ~Window(void);
 
         static void windowSizeCallback(GLFWwindow *window, int w, int h);
@@ -26,7 +24,8 @@ namespace YUNIK_GTC {
         static Window* Instance(void);
         static void setInstance(const char* name = YUNIK_GTC_DEFAULT_WINDOW_NAME,
                                 int width = YUNIK_GTC_DEFAULT_WINDOW_WIDTH,
-                                int height = YUNIK_GTC_DEFAULT_WINDOW_HEIGHT);
+                                int height = YUNIK_GTC_DEFAULT_WINDOW_HEIGHT,
+                                bool resizable = false);
         static void purgeInstance(void);
 
         static void setWindowPos(int xpos, int ypos);
