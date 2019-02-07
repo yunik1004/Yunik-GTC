@@ -7,6 +7,7 @@
 #include <iostream>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include "settings.hpp"
 #include "lib/window.hpp"
 #include "scene/mainScene.hpp"
 
@@ -17,13 +18,13 @@ int main (int argc, char* argv[]) {
 
     /* Initialize glfw */
     if (!glfwInit()) {
-        fprintf(stderr, "Error: Fail to initialize GLFW");
-        exit(EXIT_FAILURE);
+        std::cerr << "Error: Fail to initialize GLFW" << std::endl;
+        return EXIT_FAILURE;
     }
 
-    /* OpenGL version : 4.4 */
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4);
+    /* OpenGL version */
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, YUNIK_GTC_OPENGL_VERSION_MAJOR);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, YUNIK_GTC_OPENGL_VERSION_MINOR);
 
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
@@ -43,5 +44,5 @@ int main (int argc, char* argv[]) {
 }
 
 static void errorCallback(int errorCode, const char* errorDescription) {
-    fprintf(stderr, "Error: %s\n", errorDescription);
+    std::cerr << "Error: " << errorDescription << std::endl;
 }

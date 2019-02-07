@@ -1,0 +1,4 @@
+#pragma once
+
+#define YUNIK_GTC_OPENGL_VERSION_MAJOR 4
+#define YUNIK_GTC_OPENGL_VERSION_MINOR 4

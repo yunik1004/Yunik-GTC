@@ -1,5 +1,7 @@
 #include <cmath>
 #include <iostream>
+#include <sstream>
+#include "../settings.hpp"
 #include "window.hpp"
 
 namespace YUNIK_GTC {
@@ -43,8 +45,13 @@ namespace YUNIK_GTC {
             exit(EXIT_FAILURE);
         }
 
-        if (!GLEW_VERSION_4_4) {
-            std::cerr << "OpenGL 4.4 API is not avaliable." << std::endl;
+        /* OpenGL version check */
+        std::stringstream gl_version;
+        gl_version << "GL_VERSION_" << YUNIK_GTC_OPENGL_VERSION_MAJOR << "_" << YUNIK_GTC_OPENGL_VERSION_MINOR;
+        const char* gl_version_char = gl_version.str().c_str();
+
+        if (!glewIsSupported(gl_version_char)) {
+            std::cerr << gl_version_char << " is not avaliable." << std::endl;
             glfwDestroyWindow(window);
             window = nullptr;
             glfwTerminate();
