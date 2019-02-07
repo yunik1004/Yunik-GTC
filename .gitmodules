@@ -10,3 +10,6 @@
 [submodule "submodules/soloud"]
 	path = submodules/soloud
 	url = https://github.com/jarikomppa/soloud.git
+[submodule "submodules/tinyobjloader"]
+	path = submodules/tinyobjloader
+	url = https://github.com/syoyo/tinyobjloader.git

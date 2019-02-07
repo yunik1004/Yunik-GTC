@@ -43,6 +43,9 @@ ENDIF ()
 ADD_SUBDIRECTORY (${YUNIK_GTC_SUBMODULES_DIR}/soloud/contrib soloud EXCLUDE_FROM_ALL)
 INCLUDE_DIRECTORIES (${YUNIK_GTC_SUBMODULES_DIR}/soloud/include)
 
+# tinyobjloader
+ADD_SUBDIRECTORY (${YUNIK_GTC_SUBMODULES_DIR}/tinyobjloader tinyobjloader EXCLUDE_FROM_ALL)
+
 # Add source to this project's executable.
 FILE (GLOB_RECURSE YUNIK_GTC_CPP_FILES ${PROJECT_SOURCE_DIR}/src/*.cpp)
 FILE (GLOB_RECURSE YUNIK_GTC_HPP_FILES ${PROJECT_SOURCE_DIR}/src/*.hpp)
@@ -62,4 +65,5 @@ TARGET_LINK_LIBRARIES (${YUNIK_GTC_TARGET}
 	glew_s
 	glm
 	soloud
+	tinyobjloader
 )
