@@ -1,7 +1,6 @@
 #include <cmath>
 #include <iostream>
 #include <sstream>
-#include "../settings.hpp"
 #include "window.hpp"
 
 namespace YUNIK_GTC {

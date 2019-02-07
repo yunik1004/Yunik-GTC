@@ -2,11 +2,8 @@
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include "../settings.hpp"
 #include "scene.hpp"
-
-#define YUNIK_GTC_DEFAULT_WINDOW_NAME "Yunik-GTC"
-#define YUNIK_GTC_DEFAULT_WINDOW_WIDTH 960
-#define YUNIK_GTC_DEFAULT_WINDOW_HEIGHT 540
 
 namespace YUNIK_GTC {
     class Window {
