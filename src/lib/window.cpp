@@ -1,16 +1,11 @@
 #include <cmath>
 #include <iostream>
 #include <sstream>
+#include "projectManager.hpp"
 #include "window.hpp"
 
 namespace YUNIK_GTC {
-    /* Initialization */
-    Window* Window::instance = nullptr;
-    GLFWwindow* Window::window = nullptr;
-    Scene* Window::scene = nullptr;
-    /* Initialization end */
-
-    Window::Window(const char* name, int width, int height, bool resizable) {
+    Window::Window (const char* name, int width, int height, bool resizable) {
         /* Resizability */
         glfwWindowHint(GLFW_RESIZABLE, resizable ? GLFW_TRUE : GLFW_FALSE);
 
@@ -65,17 +60,14 @@ namespace YUNIK_GTC {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
 
-    Window::~Window(void) {
+    Window::~Window (void) {
         if(window != nullptr) {
             glfwDestroyWindow(window);
             window = nullptr;
         }
-        
-        delete scene;
-        scene = nullptr;
     }
 
-    void Window::windowSizeCallback(GLFWwindow* window, int w, int h) {
+    void Window::windowSizeCallback (GLFWwindow* window, int w, int h) {
         GLfloat widthFactor = (GLfloat)w / (GLfloat)YUNIK_GTC_DEFAULT_WINDOW_WIDTH;
         GLfloat heightFactor = (GLfloat)h / (GLfloat)YUNIK_GTC_DEFAULT_WINDOW_HEIGHT;
 
@@ -94,34 +86,17 @@ namespace YUNIK_GTC {
         glLoadIdentity();
     }
 
-    Window* Window::Instance(void) {
-        if(instance == nullptr) {
-            setInstance();
-        }
-        return instance;
-    }
-
-    void Window::setInstance(const char* name, int width, int height, bool resizable) {
-        if(instance == nullptr) {
-            instance = new Window(name, width, height, resizable);
-        }
-    }
-
-    void Window::purgeInstance(void) {
-        delete instance;
-        instance = nullptr;
-    }
-
-    void Window::setWindowPos(int xpos, int ypos) {
+    bool Window::setWindowPos (int xpos, int ypos) {
         if(window == nullptr) {
-            return;
+            return false;
         }
         glfwSetWindowPos(window, xpos, ypos);
+        return true;
     }
 
-    void Window::setWindowPos_middle(void) {
+    bool Window::setWindowPos_middle (void) {
         if(window == nullptr) {
-            return;
+            return false;
         }
 
         const GLFWvidmode *mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
@@ -130,37 +105,20 @@ namespace YUNIK_GTC {
         int height_interval = (int) floor((mode->height - YUNIK_GTC_DEFAULT_WINDOW_HEIGHT) / 2.0 + 0.5);
 
         glfwSetWindowPos(window, width_interval, height_interval);
+        return true;
     }
 
-    void Window::setKeyCallback(GLFWkeyfun cbfun) {
+    bool Window::setKeyCallback (GLFWkeyfun cbfun) {
         if(window == nullptr) {
-            return;
+            return false;
         }
         glfwSetKeyCallback(window, cbfun);
+        return true;
     }
 
-    void Window::setScene(Scene* newScene) {
-        if (scene != nullptr) {
-            delete scene;
-        }
-        scene = newScene;
-    }
-
-    void Window::updateScene(void) {
-        if(scene == nullptr) {
-            return;
-        }
-
-        Scene* nextScene = scene->update();
-        if(nextScene != scene) {
-            delete scene;
-            scene = nextScene;
-        }
-    }
-
-    void Window::render(void) {
-        if(window == nullptr) {
-            return;
+    bool Window::render (Scene* scene) {
+        if(window == nullptr || scene == nullptr) {
+            return false;
         }
 
         GLint m_viewport[4];
@@ -170,9 +128,10 @@ namespace YUNIK_GTC {
             glScissor(m_viewport[0], m_viewport[1], m_viewport[2], m_viewport[3]);
             glEnable(GL_SCISSOR_TEST);
 
-            updateScene();
+            scene->update();
             glfwSwapBuffers(window);
             glfwPollEvents();
         }
+        return true;
     }
 }

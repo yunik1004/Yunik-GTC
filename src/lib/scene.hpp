@@ -6,7 +6,7 @@
 namespace YUNIK_GTC {
     class Scene {
     public:
-        virtual ~Scene(void) {}
-        virtual Scene* update(void) = 0;
+        virtual ~Scene (void) {}
+        virtual Scene* update (void) = 0;
     };
 }

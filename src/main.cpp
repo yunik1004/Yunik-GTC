@@ -8,10 +8,13 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include "settings.hpp"
+#include "lib/projectManager.hpp"
 #include "lib/window.hpp"
 #include "scene/mainScene.hpp"
 
-static void errorCallback(int errorCode, const char* errorDescription);
+static void errorCallback (int errorCode, const char* errorDescription) {
+    std::cerr << "Error: " << errorDescription << std::endl;
+}
 
 int main (int argc, char* argv[]) {
     glfwSetErrorCallback(errorCallback);
@@ -30,19 +33,16 @@ int main (int argc, char* argv[]) {
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
     /* Create window */
-    YUNIK_GTC::Window::setInstance();
-    YUNIK_GTC::Window::setWindowPos_middle();
+    YUNIK_GTC::Window* window = new YUNIK_GTC::Window();
+    window->setWindowPos_middle();
+    YUNIK_GTC::ProjectManager::setWindow(window);
     
     /* Rendering session */
-    YUNIK_GTC::Window::setScene(new YUNIK_GTC::mainScene());
-    YUNIK_GTC::Window::render();
+    YUNIK_GTC::ProjectManager::setScene(new YUNIK_GTC::mainScene());
+    YUNIK_GTC::ProjectManager::render();
 
     /* Terminate session */
-    YUNIK_GTC::Window::purgeInstance();
+    YUNIK_GTC::ProjectManager::purgeInstance();
     glfwTerminate();
     return EXIT_SUCCESS;
-}
-
-static void errorCallback(int errorCode, const char* errorDescription) {
-    std::cerr << "Error: " << errorDescription << std::endl;
 }
