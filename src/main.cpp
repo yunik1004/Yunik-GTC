@@ -8,16 +8,15 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include "settings.hpp"
+#include "lib/audio.hpp"
 #include "lib/projectManager.hpp"
 #include "lib/window.hpp"
 #include "scene/mainScene.hpp"
 
-static void errorCallback (int errorCode, const char* errorDescription) {
-    std::cerr << "Error: " << errorDescription << std::endl;
-}
-
 int main (int argc, char* argv[]) {
-    glfwSetErrorCallback(errorCallback);
+    glfwSetErrorCallback([](int errorCode, const char* errorDescription) {
+        std::cerr << "Error: " << errorDescription << std::endl;
+    });
 
     /* Initialize glfw */
     if (!glfwInit()) {
@@ -36,12 +35,16 @@ int main (int argc, char* argv[]) {
     YUNIK_GTC::Window* window = new YUNIK_GTC::Window();
     window->setWindowPos_middle();
     YUNIK_GTC::ProjectManager::setWindow(window);
+
+    /* Initialize audio engine */
+    YUNIK_GTC::AudioEngine::Instance();
     
     /* Rendering session */
     YUNIK_GTC::ProjectManager::setScene(new YUNIK_GTC::mainScene());
     YUNIK_GTC::ProjectManager::render();
 
     /* Terminate session */
+    YUNIK_GTC::AudioEngine::purgeInstance();
     YUNIK_GTC::ProjectManager::purgeInstance();
     glfwTerminate();
     return EXIT_SUCCESS;
