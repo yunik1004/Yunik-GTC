@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../lib/audio.hpp"
 #include "../lib/scene.hpp"
 
 namespace YUNIK_GTC {
@@ -12,6 +13,9 @@ namespace YUNIK_GTC {
         mainScene(void) {
             /* Background color - white */
             glClearColor(1.0, 1.0 , 1.0, 0.0);
+            AudioWave* wave = new AudioWave("Tenshi ni fureta yo.mp3");
+            wave->setLooping(true);
+            AudioEngine::playBackground(wave);
         }
 
         ~mainScene(void) {
