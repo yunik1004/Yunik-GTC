@@ -70,3 +70,33 @@ TARGET_LINK_LIBRARIES (${YUNIK_GTC_TARGET}
     soloud
     tinyobjloader
 )
+
+# Move resources to build file and archive them
+SET (YUNIK_GTC_RESOURCES_DIR ${PROJECT_SOURCE_DIR}/resources)
+FILE (GLOB_RECURSE YUNIK_GTC_RESOURCES "${YUNIK_GTC_RESOURCES_DIR}/*")
+SET (_archieved_resources "")
+FOREACH (resource ${YUNIK_GTC_RESOURCES})
+    IF (resource IN_LIST _archieved_resources)
+        CONTINUE ()
+    ENDIF ()
+
+    GET_FILENAME_COMPONENT (dir ${resource} DIRECTORY)
+    get_filename_component(filename ${resource} NAME)
+    STRING (REGEX REPLACE "^${PROJECT_SOURCE_DIR}/" "" dir_relative ${dir})
+    STRING (REPLACE "/" "_" _dir_relative ${dir_relative})
+    
+    FILE (GLOB_RECURSE dir_files "${dir}/*")
+    LIST (FILTER dir_files INCLUDE REGEX "^${dir}/([^/]*)$")
+    LIST (APPEND _archieved_resources ${dir_files})
+
+    SET (output ${PROJECT_BINARY_DIR}/resources/${_dir_relative})
+
+    ADD_CUSTOM_COMMAND (
+        OUTPUT ${output}
+        COMMENT "Archive to ${output}."
+        DEPENDS ${dir_files}
+        WORKING_DIRECTORY ${dir}
+        COMMAND ${CMAKE_COMMAND} -E tar "cfv" ${output} -- ${dir_files}
+    )
+    ADD_CUSTOM_TARGET (${_dir_relative} ALL DEPENDS ${dir_files} ${output} WORKING_DIRECTORY ${dir})
+ENDFOREACH ()
