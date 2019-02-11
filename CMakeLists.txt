@@ -49,6 +49,22 @@ ADD_SUBDIRECTORY (${YUNIK_GTC_SUBMODULES_DIR}/tinyobjloader tinyobjloader EXCLUD
 # stb
 INCLUDE_DIRECTORIES (${YUNIK_GTC_SUBMODULES_DIR}/stb)
 
+# physfs
+SET (PHYSFS_ARCHIVE_7Z OFF CACHE BOOL "" FORCE)
+SET (PHYSFS_ARCHIVE_GRP OFF CACHE BOOL "" FORCE)
+SET (PHYSFS_ARCHIVE_WAD OFF CACHE BOOL "" FORCE)
+SET (PHYSFS_ARCHIVE_HOG OFF CACHE BOOL "" FORCE)
+SET (PHYSFS_ARCHIVE_MVL OFF CACHE BOOL "" FORCE)
+SET (PHYSFS_ARCHIVE_QPAK OFF CACHE BOOL "" FORCE)
+SET (PHYSFS_ARCHIVE_SLB OFF CACHE BOOL "" FORCE)
+SET (PHYSFS_ARCHIVE_ISO9660 OFF CACHE BOOL "" FORCE)
+SET (PHYSFS_ARCHIVE_VDF OFF CACHE BOOL "" FORCE)
+SET (PHYSFS_BUILD_SHARED OFF CACHE BOOL "" FORCE)
+SET (PHYSFS_BUILD_TEST OFF CACHE BOOL "" FORCE)
+
+ADD_SUBDIRECTORY (${YUNIK_GTC_SUBMODULES_DIR}/physfs physfs EXCLUDE_FROM_ALL)
+INCLUDE_DIRECTORIES (${YUNIK_GTC_SUBMODULES_DIR}/physfs/src)
+
 # Add source to this project's executable.
 FILE (GLOB_RECURSE YUNIK_GTC_CPP_FILES ${PROJECT_SOURCE_DIR}/src/*.cpp)
 FILE (GLOB_RECURSE YUNIK_GTC_HPP_FILES ${PROJECT_SOURCE_DIR}/src/*.hpp)
@@ -69,6 +85,7 @@ TARGET_LINK_LIBRARIES (${YUNIK_GTC_TARGET}
     glm
     soloud
     tinyobjloader
+    physfs-static
 )
 
 # Move resources to build file and archive them
@@ -89,14 +106,14 @@ FOREACH (resource ${YUNIK_GTC_RESOURCES})
     LIST (FILTER dir_files INCLUDE REGEX "^${dir}/([^/]*)$")
     LIST (APPEND _archieved_resources ${dir_files})
 
-    SET (output ${PROJECT_BINARY_DIR}/resources/${_dir_relative})
+    SET (output ${PROJECT_BINARY_DIR}/resources/${_dir_relative}.yr)
 
     ADD_CUSTOM_COMMAND (
         OUTPUT ${output}
         COMMENT "Archive to ${output}."
         DEPENDS ${dir_files}
         WORKING_DIRECTORY ${dir}
-        COMMAND ${CMAKE_COMMAND} -E tar "cfv" ${output} -- ${dir_files}
+        COMMAND ${CMAKE_COMMAND} -E tar "cfv" ${output} --format=zip -- ${dir_files}
     )
     ADD_CUSTOM_TARGET (${_dir_relative} ALL DEPENDS ${dir_files} ${output} WORKING_DIRECTORY ${dir})
 ENDFOREACH ()

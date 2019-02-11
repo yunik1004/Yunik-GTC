@@ -1,4 +1,6 @@
 #include "audio.hpp"
+#include "filesys.hpp"
+#include <iostream>
 
 namespace YUNIK_GTC {
     /*****************************************************************/
@@ -6,7 +8,8 @@ namespace YUNIK_GTC {
     /*****************************************************************/
 
     AudioWave::AudioWave (const char* filePath) {
-        wave.load(filePath);
+        PhysfsFile* fp = new PhysfsFile(filePath);
+        wave.loadFile(fp);
     }
 
     AudioWave::~AudioWave (void) {

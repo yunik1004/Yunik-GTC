@@ -9,16 +9,20 @@
 #include <GLFW/glfw3.h>
 #include "settings.hpp"
 #include "lib/audio.hpp"
+#include "lib/filesys.hpp"
 #include "lib/projectManager.hpp"
 #include "lib/window.hpp"
 #include "scene/mainScene.hpp"
 
 int main (int argc, char* argv[]) {
+    /* Initialize filesystem */
+    YUNIK_GTC::Filesys_init(argv[0]);
+
+    /* Initialize glfw */
     glfwSetErrorCallback([](int errorCode, const char* errorDescription) {
         std::cerr << "Error: " << errorDescription << std::endl;
     });
 
-    /* Initialize glfw */
     if (!glfwInit()) {
         std::cerr << "Error: Fail to initialize GLFW" << std::endl;
         return EXIT_FAILURE;
@@ -47,5 +51,6 @@ int main (int argc, char* argv[]) {
     YUNIK_GTC::AudioEngine::purgeInstance();
     YUNIK_GTC::ProjectManager::purgeInstance();
     glfwTerminate();
+    YUNIK_GTC::Filesys_deinit();
     return EXIT_SUCCESS;
 }

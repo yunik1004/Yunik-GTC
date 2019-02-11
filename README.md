@@ -21,5 +21,14 @@ cmake .. -G Ninja -DCMAKE_BUILD_TYPE=RELEASE
 ninja
 ```
 
+## License
+
+- Every external libraries has their own license.
+
+- This project is MIT license.
+
+- Sample music is arranged version of 'Tenshi ni Fureta yo!' which I(yunik1004) made.
+ You cannot use it for your business purpose.
+
 ## Contributions
-* [**yunik1004**](https://github.com/yunik1004) - *Initial work*
+* [**yunik1004**](https://github.com/yunik1004) - *Initial work*, sample music
