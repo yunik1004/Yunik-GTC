@@ -90,6 +90,7 @@ TARGET_LINK_LIBRARIES (${YUNIK_GTC_TARGET}
 
 # Move resources to build file and archive them
 SET (YUNIK_GTC_RESOURCES_DIR ${PROJECT_SOURCE_DIR}/resources)
+SET (YUNIK_GTC_RESOURCES_RESULT_DIR ${PROJECT_BINARY_DIR}/resources)
 FILE (GLOB_RECURSE YUNIK_GTC_RESOURCES "${YUNIK_GTC_RESOURCES_DIR}/*")
 SET (_archieved_resources "")
 FOREACH (resource ${YUNIK_GTC_RESOURCES})
@@ -106,7 +107,7 @@ FOREACH (resource ${YUNIK_GTC_RESOURCES})
     LIST (FILTER dir_files INCLUDE REGEX "^${dir}/([^/]*)$")
     LIST (APPEND _archieved_resources ${dir_files})
 
-    SET (output ${PROJECT_BINARY_DIR}/resources/${_dir_relative}.yr)
+    SET (output ${YUNIK_GTC_RESOURCES_RESULT_DIR}/${_dir_relative}.yr)
 
     ADD_CUSTOM_COMMAND (
         OUTPUT ${output}
@@ -117,3 +118,12 @@ FOREACH (resource ${YUNIK_GTC_RESOURCES})
     )
     ADD_CUSTOM_TARGET (${_dir_relative} ALL DEPENDS ${dir_files} ${output} WORKING_DIRECTORY ${dir})
 ENDFOREACH ()
+
+# CPack settings
+INSTALL (TARGETS ${YUNIK_GTC_TARGET} DESTINATION .)
+INSTALL (DIRECTORY ${YUNIK_GTC_RESOURCES_RESULT_DIR}  DESTINATION .)
+
+SET (CPACK_GENERATOR "ZIP")
+SET (CPACK_PACKAGE_VERSION "0.1.1")
+
+INCLUDE (CPack)

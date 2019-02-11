@@ -28,8 +28,6 @@ namespace YUNIK_GTC {
             std::string path_unix = path.string();
             std::replace(path_unix.begin(), path_unix.end(), '\\', '/');
 
-            std::cout << path_unix << std::endl;
-
             std::string path_origin = path.stem().string();
             auto start = path_origin.find(path_delimiter_str);
             if (start == std::string::npos) {
