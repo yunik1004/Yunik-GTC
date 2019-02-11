@@ -17,7 +17,6 @@ namespace YUNIK_GTC {
         }
 
         /* Mount resource files */
-        
         char path_delimiter = '_';
         std::string path_delimiter_str(1, path_delimiter);
         for (const auto& entry : std::filesystem::directory_iterator(YUNIK_GTC_RESOURCE_DIR)) {
@@ -43,19 +42,6 @@ namespace YUNIK_GTC {
                 PHYSFS_mount((const char*)path_unix.c_str(), (const char*)path_rel.c_str(), 1);
             }
         }
-        
-
-        //PHYSFS_mount("resources_music.yr", "/", 1);
-        //PHYSFS_addToSearchPath("resources_music.yr", 1);
-
-        //printf("%d\n", PHYSFS_exists("Tenshi ni Fureta yo!.mp3"));
-        //printf("%d\n", PHYSFS_exists("resources/Tenshi ni Fureta yo!.mp3"));
-        //printf("%d\n", PHYSFS_exists("resources/resources/Tenshi ni Fureta yo!.mp3"));
-
-        char **rc = PHYSFS_enumerateFiles("/music");
-        char **i;
-        for (i = rc; *i != NULL; i++)
-            printf(" * We've got [%s].\n", *i);
     }
 
     void Filesys_deinit (void) {
