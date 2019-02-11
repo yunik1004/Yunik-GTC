@@ -2,10 +2,12 @@
 
 #include <soloud.h>
 #include <soloud_wav.h>
+#include "filesys.hpp"
 
 namespace YUNIK_GTC {
     class AudioWave {
     private:
+        PhysfsFile* fp;
         SoLoud::Wav wave;
     public:
         AudioWave (const char* filePath);
