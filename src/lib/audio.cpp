@@ -43,16 +43,19 @@ namespace YUNIK_GTC {
         instance = nullptr;
     }
 
-    AudioEngine* AudioEngine::Instance (void) {
+    void AudioEngine::init (void) {
         if (instance == nullptr) {
             instance = new AudioEngine();
         }
-        return instance;
     }
 
-    void AudioEngine::purgeInstance (void) {
+    void AudioEngine::deinit (void) {
         delete instance;
         instance = nullptr;
+    }
+
+    AudioEngine* AudioEngine::Instance (void) {
+        return instance;
     }
 
     void AudioEngine::playBackground (AudioWave* audioWave) {

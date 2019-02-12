@@ -26,8 +26,9 @@ namespace YUNIK_GTC {
         static SoLoud::Soloud* engine;
 
     public:
+        static void init (void);
+        static void deinit (void);
         static AudioEngine* Instance (void);
-        static void purgeInstance (void);
 
         static void playBackground (AudioWave* audioWave);
     };

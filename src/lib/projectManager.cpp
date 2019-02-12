@@ -16,14 +16,14 @@ namespace YUNIK_GTC {
         YUNIK_GTC::Window_init();
 
         /* Initialize audio engine */
-        YUNIK_GTC::AudioEngine::Instance();
+        YUNIK_GTC::AudioEngine::init();
     }
     
     ProjectManager::~ProjectManager (void) {
         purgeScene();
         purgeWindow();
 
-        YUNIK_GTC::AudioEngine::purgeInstance();
+        YUNIK_GTC::AudioEngine::deinit();
         YUNIK_GTC::Window_deinit();
         YUNIK_GTC::Filesys_deinit();
 
