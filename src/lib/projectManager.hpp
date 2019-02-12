@@ -14,8 +14,9 @@ namespace YUNIK_GTC {
         static Window* window;
     public:
         static void init (char* argv0);
+        static void deinit (void);
+        
         static ProjectManager* Instance (void);
-        static void purgeInstance (void);
 
         static void setWindow (Window* newWindow);
         static void purgeWindow (void);

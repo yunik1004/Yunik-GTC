@@ -23,6 +23,6 @@ int main (int argc, char* argv[]) {
     YUNIK_GTC::ProjectManager::render();
 
     /* Terminate session */
-    YUNIK_GTC::ProjectManager::purgeInstance();
+    YUNIK_GTC::ProjectManager::deinit();
     return EXIT_SUCCESS;
 }

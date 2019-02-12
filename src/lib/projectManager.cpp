@@ -26,7 +26,7 @@ namespace YUNIK_GTC {
         YUNIK_GTC::AudioEngine::purgeInstance();
         YUNIK_GTC::Window_deinit();
         YUNIK_GTC::Filesys_deinit();
-        
+
         instance = nullptr;
     }
 
@@ -36,13 +36,13 @@ namespace YUNIK_GTC {
         }
     }
 
-    ProjectManager* ProjectManager::Instance (void) {
-        return instance;
-    }
-
-    void ProjectManager::purgeInstance (void) {
+    void ProjectManager::deinit (void) {
         delete instance;
         instance = nullptr;
+    }
+
+    ProjectManager* ProjectManager::Instance (void) {
+        return instance;
     }
 
     void ProjectManager::setWindow (Window* newWindow) {
