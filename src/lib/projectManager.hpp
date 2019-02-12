@@ -6,13 +6,14 @@
 namespace YUNIK_GTC {
     class ProjectManager {
     private:
-        ProjectManager (void);
+        ProjectManager (char* argv0);
         ~ProjectManager (void);
 
         static ProjectManager* instance;
         static Scene* scene;
         static Window* window;
     public:
+        static void init (char* argv0);
         static ProjectManager* Instance (void);
         static void purgeInstance (void);
 

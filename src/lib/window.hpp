@@ -6,6 +6,9 @@
 #include "scene.hpp"
 
 namespace YUNIK_GTC {
+    void Window_init (void);
+    void Window_deinit (void);
+
     class Window {
     private:
         static void windowSizeCallback (GLFWwindow *window, int w, int h);

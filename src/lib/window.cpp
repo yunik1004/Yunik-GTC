@@ -1,10 +1,43 @@
 #include <cmath>
+#include <cstdlib>
 #include <iostream>
 #include <sstream>
+#include "filesys.hpp"
 #include "projectManager.hpp"
 #include "window.hpp"
 
 namespace YUNIK_GTC {
+    /*****************************************************************/
+    /*                    Window initialization                      */
+    /*****************************************************************/
+
+    void Window_init (void) {
+        /* Initialize glfw */
+        glfwSetErrorCallback([](int errorCode, const char* errorDescription) {
+            std::cerr << "Error: " << errorDescription << std::endl;
+        });
+
+        if (!glfwInit()) {
+            std::cerr << "Error: Fail to initialize GLFW" << std::endl;
+            exit(EXIT_FAILURE);
+        }
+
+        /* OpenGL version */
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, YUNIK_GTC_OPENGL_VERSION_MAJOR);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, YUNIK_GTC_OPENGL_VERSION_MINOR);
+
+        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+    }
+
+    void Window_deinit (void) {
+        glfwTerminate();
+    }
+
+    /*****************************************************************/
+    /*                            Window                             */
+    /*****************************************************************/
+
     Window::Window (const char* name, int width, int height, bool resizable) {
         /* Resizability */
         glfwWindowHint(GLFW_RESIZABLE, resizable ? GLFW_TRUE : GLFW_FALSE);

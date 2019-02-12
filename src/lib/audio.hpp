@@ -7,7 +7,7 @@
 namespace YUNIK_GTC {
     class AudioWave {
     private:
-        PhysfsFile* fp;
+        AudioFile* fp;
         SoLoud::Wav wave;
     public:
         AudioWave (const char* filePath);

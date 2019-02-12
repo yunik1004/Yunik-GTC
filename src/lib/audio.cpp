@@ -7,7 +7,7 @@ namespace YUNIK_GTC {
     /*****************************************************************/
 
     AudioWave::AudioWave (const char* filePath) {
-        fp = new PhysfsFile(filePath);
+        fp = new AudioFile(filePath);
         wave.loadFile(fp);
     }
 

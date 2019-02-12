@@ -1,5 +1,6 @@
 #include "filesys.hpp"
 #include <algorithm>
+#include <cstdlib>
 #include <filesystem>
 #include <iostream>
 #include <string>
@@ -47,46 +48,46 @@ namespace YUNIK_GTC {
     }
 
     /*****************************************************************/
-    /*                          PhysfsFile                           */
+    /*                           AudioFile                           */
     /*****************************************************************/
 
-    PhysfsFile::PhysfsFile (void) {
+    AudioFile::AudioFile (void) {
         mFileHandle = 0;
     }
 
-    PhysfsFile::PhysfsFile (const char* aFilepath) {
+    AudioFile::AudioFile (const char* aFilepath) {
         open(aFilepath); // TODO: throw an exception if file does not exist
     }
 
-    PhysfsFile::PhysfsFile (PHYSFS_File* fp): mFileHandle(fp) { }
+    AudioFile::AudioFile (PHYSFS_File* fp): mFileHandle(fp) { }
 
-    PhysfsFile::~PhysfsFile (void) {
+    AudioFile::~AudioFile (void) {
         if (mFileHandle) {
             PHYSFS_close(mFileHandle);
         }
     }
 
-    int PhysfsFile::eof (void) {
+    int AudioFile::eof (void) {
         return PHYSFS_eof(mFileHandle);
     }
 
-    unsigned int PhysfsFile::read (unsigned char* aDst, unsigned int aBytes) {
+    unsigned int AudioFile::read (unsigned char* aDst, unsigned int aBytes) {
         return (unsigned int) PHYSFS_read(mFileHandle, aDst, aBytes, 1);
     }
 
-    unsigned int PhysfsFile::length (void) {
+    unsigned int AudioFile::length (void) {
        return (unsigned int) PHYSFS_fileLength(mFileHandle);
     }
 
-    void PhysfsFile::seek (int aOffset) {
+    void AudioFile::seek (int aOffset) {
         PHYSFS_seek(mFileHandle, aOffset);
     }
 
-    unsigned int PhysfsFile::pos (void) {
+    unsigned int AudioFile::pos (void) {
         return (unsigned int) PHYSFS_tell(mFileHandle);
     }
 
-    SoLoud::result PhysfsFile::open (const char* aFilename) {
+    SoLoud::result AudioFile::open (const char* aFilename) {
         if (PHYSFS_exists(aFilename) == 0) {
             std::cerr << "Error: File not found" << std::endl;
             return SoLoud::FILE_NOT_FOUND;
@@ -99,7 +100,19 @@ namespace YUNIK_GTC {
         return SoLoud::SO_NO_ERROR;
     }
 
-    PHYSFS_File* PhysfsFile::getPhysfsFilePtr (void) {
+    PHYSFS_File* AudioFile::getPhysfsFilePtr (void) {
         return mFileHandle;
+    }
+
+    /*****************************************************************/
+    /*                           ImageFile                           */
+    /*****************************************************************/
+
+    ImageFile::ImageFile (const char* aFilepath) {
+        //
+    }
+
+    ImageFile::~ImageFile (void) {
+        //
     }
 }
