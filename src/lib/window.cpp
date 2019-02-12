@@ -1,10 +1,9 @@
+#include "window.hpp"
 #include <cmath>
 #include <cstdlib>
 #include <iostream>
 #include <sstream>
-#include "filesys.hpp"
 #include "projectManager.hpp"
-#include "window.hpp"
 
 namespace YUNIK_GTC {
     /*****************************************************************/
@@ -69,7 +68,6 @@ namespace YUNIK_GTC {
         if (errorCode != GLEW_OK) {
             std::cerr << "Error: Fail to initialize GLEW - " << glewGetErrorString(errorCode) << std::endl;
             glfwDestroyWindow(window);
-            window = nullptr;
             glfwTerminate();
             exit(EXIT_FAILURE);
         }
@@ -82,7 +80,6 @@ namespace YUNIK_GTC {
         if (!glewIsSupported(gl_version_char)) {
             std::cerr << gl_version_char << " is not avaliable." << std::endl;
             glfwDestroyWindow(window);
-            window = nullptr;
             glfwTerminate();
             exit(EXIT_FAILURE);
         }
@@ -94,9 +91,12 @@ namespace YUNIK_GTC {
     }
 
     Window::~Window (void) {
-        if(window != nullptr) {
+        if (window != nullptr) {
             glfwDestroyWindow(window);
-            window = nullptr;
+        }
+
+        if (windowIconImage != nullptr) {
+            delete windowIconImage;
         }
     }
 
@@ -138,6 +138,15 @@ namespace YUNIK_GTC {
         int height_interval = (int) floor((mode->height - YUNIK_GTC_DEFAULT_WINDOW_HEIGHT) / 2.0 + 0.5);
 
         glfwSetWindowPos(window, width_interval, height_interval);
+        return true;
+    }
+
+    bool Window::setWindowIcon (const char* filePath) {
+        windowIconImage = new ImageFile(filePath);
+        windowIcon.width = windowIconImage->getWidth();
+        windowIcon.height = windowIconImage->getHeight();
+        windowIcon.pixels = windowIconImage->getImage();
+        glfwSetWindowIcon(window, 1, &windowIcon);
         return true;
     }
 

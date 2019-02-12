@@ -16,6 +16,7 @@ int main (int argc, char* argv[]) {
     /* Create window */
     YUNIK_GTC::Window* window = new YUNIK_GTC::Window();
     window->setWindowPos_middle();
+    window->setWindowIcon("icon/yunik.png");
     YUNIK_GTC::ProjectManager::setWindow(window);
     
     /* Rendering session */

@@ -3,6 +3,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include "../settings.hpp"
+#include "filesys.hpp"
 #include "scene.hpp"
 
 namespace YUNIK_GTC {
@@ -14,6 +15,8 @@ namespace YUNIK_GTC {
         static void windowSizeCallback (GLFWwindow *window, int w, int h);
 
         GLFWwindow* window = nullptr;
+        GLFWimage windowIcon;
+        ImageFile* windowIconImage = nullptr;
 
     public:
         Window (const char* name = YUNIK_GTC_DEFAULT_WINDOW_NAME,
@@ -24,6 +27,8 @@ namespace YUNIK_GTC {
 
         bool setWindowPos (int xpos, int ypos);
         bool setWindowPos_middle (void);
+
+        bool setWindowIcon (const char* filePath);
 
         bool setKeyCallback (GLFWkeyfun cbfun);
 

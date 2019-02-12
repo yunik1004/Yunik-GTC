@@ -26,8 +26,16 @@ namespace YUNIK_GTC {
 
     class ImageFile {
     private:
+        int width;
+        int height;
+        int channels;
+        unsigned char* image = nullptr;
     public:
         ImageFile (const char* aFilepath);
         ~ImageFile (void);
+
+        int getWidth (void);
+        int getHeight (void);
+        unsigned char* getImage (void);
     };
 }

@@ -1,9 +1,14 @@
 #include "filesys.hpp"
 #include <algorithm>
+#include <assert.h>
 #include <cstdlib>
 #include <filesystem>
 #include <iostream>
 #include <string>
+#ifndef STB_IMAGE_IMPLEMENTATION
+#define STB_IMAGE_IMPLEMENTATION
+#endif
+#include <stb_image.h>
 #include "../settings.hpp"
 
 namespace YUNIK_GTC {
@@ -108,11 +113,52 @@ namespace YUNIK_GTC {
     /*                           ImageFile                           */
     /*****************************************************************/
 
+    static int PhysfsRead (void* user, char* data, int size) {
+        PHYSFS_File* file = (PHYSFS_File*)user;
+        return (int)PHYSFS_readBytes(file, data, size);
+    }
+
+    static void PhysfsSkip (void* user, int offset) {
+        PHYSFS_File* file = (PHYSFS_File*)user;
+        const int currentPosition = PHYSFS_tell(file);
+        assert(currentPosition >= 0);
+        const int newPosition = currentPosition + offset;
+        const int success = PHYSFS_seek(file, newPosition);
+        assert(success);
+    }
+
+    static int PhysfsEOF (void* user) {
+        PHYSFS_File* file = (PHYSFS_File*)user;
+        return PHYSFS_eof(file);
+    }
+
+    static const stbi_io_callbacks PhysfsCallbacks = {
+        PhysfsRead,
+        PhysfsSkip,
+        PhysfsEOF
+    };
+
     ImageFile::ImageFile (const char* aFilepath) {
-        //
+        PHYSFS_File* mFileHandle = PHYSFS_openRead(aFilepath);
+        image = (unsigned char*)stbi_load_from_callbacks(&PhysfsCallbacks, mFileHandle, &width, &height, &channels, STBI_default);
+        PHYSFS_close(mFileHandle);
     }
 
     ImageFile::~ImageFile (void) {
-        //
+        if (image != nullptr) {
+            stbi_image_free(image);
+        }
+    }
+
+    int ImageFile::getWidth (void) {
+        return width;
+    }
+
+    int ImageFile::getHeight (void) {
+        return height;
+    }
+
+    unsigned char* ImageFile::getImage (void) {
+        return image;
     }
 }
