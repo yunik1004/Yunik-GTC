@@ -1,41 +1,31 @@
 #pragma once
 
 #include <physfs.h>
-#include <soloud_file.h>
 
 namespace YUNIK_GTC {
     void Filesys_init (char* argv0);
     void Filesys_deinit (void);
 
-    class AudioFile: public SoLoud::File {
-    private:
-        PHYSFS_File* mFileHandle;
-    public:
-        virtual ~AudioFile (void);
-        virtual int eof (void);
-        virtual unsigned int read (unsigned char* aDst, unsigned int aBytes);
-        virtual unsigned int length (void);
-        virtual void seek (int aOffset);
-        virtual unsigned int pos (void);
-        AudioFile (void);
-        AudioFile (const char* aFilepath);
-        AudioFile (PHYSFS_File* fp);
-        SoLoud::result open (const char* aFilename);
-        virtual PHYSFS_File* getPhysfsFilePtr (void);
+    enum class ArchiveFileError {
+        FILE_NOT_FOUND,
+        FILE_LOAD_FAILED,
+        FILE_NO_ERROR
     };
 
-    class ImageFile {
+    class ArchiveFile {
     private:
-        int width;
-        int height;
-        int channels;
-        unsigned char* image = nullptr;
+        PHYSFS_File* mFileHandle;
+        ArchiveFileError err;
     public:
-        ImageFile (const char* aFilepath);
-        ~ImageFile (void);
+        ArchiveFile (const char* aFilePath);
+        ~ArchiveFile (void);
+        int eof (void);
+        int read (void* aDst, unsigned int aBytes);
+        int readBytes (void* aDst, unsigned int len);
+        int length (void);
+        int seek (int aOffset);
+        int tell (void);
 
-        int getWidth (void);
-        int getHeight (void);
-        unsigned char* getImage (void);
+        ArchiveFileError failure (void);
     };
 }

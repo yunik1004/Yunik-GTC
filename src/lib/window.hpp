@@ -3,7 +3,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include "../settings.hpp"
-#include "filesys.hpp"
+#include "image.hpp"
 #include "scene.hpp"
 
 namespace YUNIK_GTC {

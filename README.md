@@ -14,6 +14,13 @@ This is the template for the game using C++
 
 ## Build
 
+Currently linux is not supported because SoLoud does not support the CMake build with linux audio system.
+
+If you are Windows10 user & want to build with clang, then run the following code first:
+```powershell
+cmd /c "`"C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat`" x86_amd64 & powershell"
+```
+
 ```bash
 mkdir build
 cd build

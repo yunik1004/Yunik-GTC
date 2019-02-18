@@ -1,14 +1,9 @@
 #include "filesys.hpp"
 #include <algorithm>
-#include <assert.h>
 #include <cstdlib>
 #include <filesystem>
 #include <iostream>
 #include <string>
-#ifndef STB_IMAGE_IMPLEMENTATION
-#define STB_IMAGE_IMPLEMENTATION
-#endif
-#include <stb_image.h>
 #include "../settings.hpp"
 
 namespace YUNIK_GTC {
@@ -53,112 +48,53 @@ namespace YUNIK_GTC {
     }
 
     /*****************************************************************/
-    /*                           AudioFile                           */
+    /*                          ArchiveFile                          */
     /*****************************************************************/
 
-    AudioFile::AudioFile (void) {
-        mFileHandle = 0;
+    ArchiveFile::ArchiveFile (const char* aFilePath) {
+        if (PHYSFS_exists(aFilePath) == 0) {
+            std::cerr << "Error: '" << aFilePath << "' not found" << std::endl;
+            err = ArchiveFileError::FILE_NOT_FOUND;
+        }
+        mFileHandle = PHYSFS_openRead(aFilePath);
+        if (!mFileHandle) {
+            std::cerr << "Error: '" << aFilePath << "' load failed" << std::endl;
+            err = ArchiveFileError::FILE_LOAD_FAILED;
+        }
+        err = ArchiveFileError::FILE_NO_ERROR;
     }
 
-    AudioFile::AudioFile (const char* aFilepath) {
-        open(aFilepath); // TODO: throw an exception if file does not exist
-    }
-
-    AudioFile::AudioFile (PHYSFS_File* fp): mFileHandle(fp) { }
-
-    AudioFile::~AudioFile (void) {
+    ArchiveFile::~ArchiveFile (void) {
         if (mFileHandle) {
             PHYSFS_close(mFileHandle);
         }
     }
 
-    int AudioFile::eof (void) {
+    int ArchiveFile::eof (void) {
         return PHYSFS_eof(mFileHandle);
     }
 
-    unsigned int AudioFile::read (unsigned char* aDst, unsigned int aBytes) {
-        return (unsigned int) PHYSFS_read(mFileHandle, aDst, aBytes, 1);
+    int ArchiveFile::read (void* aDst, unsigned int aBytes) {
+        return (int) PHYSFS_read(mFileHandle, aDst, aBytes, 1);
     }
 
-    unsigned int AudioFile::length (void) {
-       return (unsigned int) PHYSFS_fileLength(mFileHandle);
+    int ArchiveFile::readBytes (void* aDst, unsigned int len) {
+        return (int) PHYSFS_readBytes(mFileHandle, aDst, len);
     }
 
-    void AudioFile::seek (int aOffset) {
+    int ArchiveFile::length (void) {
+        return (int) PHYSFS_fileLength(mFileHandle);
+    }
+
+    int ArchiveFile::seek (int aOffset) {
         PHYSFS_seek(mFileHandle, aOffset);
     }
 
-    unsigned int AudioFile::pos (void) {
-        return (unsigned int) PHYSFS_tell(mFileHandle);
+    int ArchiveFile::tell (void) {
+        return (int) PHYSFS_tell(mFileHandle);
     }
 
-    SoLoud::result AudioFile::open (const char* aFilename) {
-        if (PHYSFS_exists(aFilename) == 0) {
-            std::cerr << "Error: File not found" << std::endl;
-            return SoLoud::FILE_NOT_FOUND;
-        }
-        mFileHandle = PHYSFS_openRead(aFilename);
-        if (!mFileHandle) {
-            std::cerr << "Error: File load failed" << std::endl;
-            return SoLoud::FILE_LOAD_FAILED;
-        }
-        return SoLoud::SO_NO_ERROR;
-    }
-
-    PHYSFS_File* AudioFile::getPhysfsFilePtr (void) {
-        return mFileHandle;
-    }
-
-    /*****************************************************************/
-    /*                           ImageFile                           */
-    /*****************************************************************/
-
-    static int PhysfsRead (void* user, char* data, int size) {
-        PHYSFS_File* file = (PHYSFS_File*)user;
-        return (int)PHYSFS_readBytes(file, data, size);
-    }
-
-    static void PhysfsSkip (void* user, int offset) {
-        PHYSFS_File* file = (PHYSFS_File*)user;
-        const int currentPosition = PHYSFS_tell(file);
-        assert(currentPosition >= 0);
-        const int newPosition = currentPosition + offset;
-        const int success = PHYSFS_seek(file, newPosition);
-        assert(success);
-    }
-
-    static int PhysfsEOF (void* user) {
-        PHYSFS_File* file = (PHYSFS_File*)user;
-        return PHYSFS_eof(file);
-    }
-
-    static const stbi_io_callbacks PhysfsCallbacks = {
-        PhysfsRead,
-        PhysfsSkip,
-        PhysfsEOF
-    };
-
-    ImageFile::ImageFile (const char* aFilepath) {
-        PHYSFS_File* mFileHandle = PHYSFS_openRead(aFilepath);
-        image = (unsigned char*)stbi_load_from_callbacks(&PhysfsCallbacks, mFileHandle, &width, &height, &channels, STBI_default);
-        PHYSFS_close(mFileHandle);
-    }
-
-    ImageFile::~ImageFile (void) {
-        if (image != nullptr) {
-            stbi_image_free(image);
-        }
-    }
-
-    int ImageFile::getWidth (void) {
-        return width;
-    }
-
-    int ImageFile::getHeight (void) {
-        return height;
-    }
-
-    unsigned char* ImageFile::getImage (void) {
-        return image;
+    ArchiveFileError ArchiveFile::failure (void) {
+        return err;
     }
 }

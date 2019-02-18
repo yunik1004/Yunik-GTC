@@ -14,9 +14,12 @@ namespace YUNIK_GTC {
         mainScene(void) {
             /* Background color - white */
             glClearColor(1.0, 1.0 , 1.0, 0.0);
+
             wave = new AudioWave("music/Tenshi ni Fureta yo!(Arrange by yunik1004).mp3");
             wave->setLooping(true);
-            AudioEngine::playBackground(wave);
+            if (wave->failure() == ArchiveFileError::FILE_NO_ERROR) {
+                AudioEngine::playBackground(wave);
+            }
         }
 
         ~mainScene(void) {
