@@ -1,6 +1,31 @@
 #pragma once
 
 #include <physfs.h>
+#include <iostream>
+#include <string>
+
+namespace PhysFS {
+    typedef enum {
+        READ,
+        WRITE,
+        APPEND
+    } mode;
+
+    class base_fstream {
+    protected:
+        PHYSFS_File* const file;
+    public:
+        base_fstream (PHYSFS_File* file);
+        virtual ~base_fstream (void);
+        size_t length (void);
+    };
+
+    class ifstream : public base_fstream, public std::istream {
+    public:
+        ifstream (std::string const& filename);
+        virtual ~ifstream (void);
+    };
+}
 
 namespace YUNIK_GTC {
     void Filesys_init (char* argv0);
@@ -27,5 +52,11 @@ namespace YUNIK_GTC {
         int tell (void);
 
         ArchiveFileError failure (void);
+    };
+
+    class ifstream : public PhysFS::ifstream {
+    public:
+        ifstream (std::string const& filename);
+        virtual ~ifstream (void);
     };
 }

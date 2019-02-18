@@ -2,9 +2,149 @@
 #include <algorithm>
 #include <cstdlib>
 #include <filesystem>
-#include <iostream>
-#include <string>
+#include <stdexcept>
+#include <streambuf>
 #include "../settings.hpp"
+
+namespace PhysFS {
+    /*****************************************************************/
+    /*                              fbuf                             */
+    /*****************************************************************/
+
+    class fbuf : public std::streambuf {
+    private:
+        fbuf (const fbuf & other);
+        fbuf& operator=(const fbuf& other);
+
+        int_type underflow (void) {
+            if (PHYSFS_eof(file)) {
+                return traits_type::eof();
+            }
+            size_t bytesRead = PHYSFS_read(file, buffer, 1, bufferSize);
+            if (bytesRead < 1) {
+                return traits_type::eof();
+            }
+            setg(buffer, buffer, buffer + bytesRead);
+            return (unsigned char) *gptr();
+        }
+
+        pos_type seekoff (off_type pos, std::ios_base::seekdir dir, std::ios_base::openmode mode) {
+            switch (dir) {
+            case std::ios_base::beg:
+                PHYSFS_seek(file, pos);
+                break;
+            case std::ios_base::cur:
+                // subtract characters currently in buffer from seek position
+                PHYSFS_seek(file, (PHYSFS_tell(file) + pos) - (egptr() - gptr()));
+                break;
+            case std::ios_base::end:
+                PHYSFS_seek(file, PHYSFS_fileLength(file) + pos);
+                break;
+            }
+            if (mode & std::ios_base::in) {
+                setg(egptr(), egptr(), egptr());
+            }
+            if (mode & std::ios_base::out) {
+                setp(buffer, buffer);
+            }
+            return PHYSFS_tell(file);
+        }
+
+        pos_type seekpos (pos_type pos, std::ios_base::openmode mode) {
+            PHYSFS_seek(file, pos);
+            if (mode & std::ios_base::in) {
+                setg(egptr(), egptr(), egptr());
+            }
+            if (mode & std::ios_base::out) {
+                setp(buffer, buffer);
+            }
+            return PHYSFS_tell(file);
+        }
+
+        int_type overflow (int_type c = traits_type::eof()) {
+            if (pptr() == pbase() && c == traits_type::eof()) {
+                return 0; // no-op
+            }
+            if (PHYSFS_write(file, pbase(), pptr() - pbase(), 1) < 1) {
+                return traits_type::eof();
+            }
+            if (c != traits_type::eof()) {
+                if (PHYSFS_write(file, &c, 1, 1) < 1) {
+                    return traits_type::eof();
+                }
+            }
+
+            return 0;
+        }
+
+        int sync (void) {
+            return overflow();
+        }
+
+        char* buffer;
+        size_t const bufferSize;
+    protected:
+        PHYSFS_File* const file;
+    public:
+        fbuf (PHYSFS_File * file, std::size_t bufferSize = 2048) : file(file), bufferSize(bufferSize) {
+            buffer = new char[bufferSize];
+            char * end = buffer + bufferSize;
+            setg(end, end, end);
+            setp(buffer, end);
+        }
+
+        ~fbuf (void) {
+            sync();
+            delete [] buffer;
+        }
+    };
+
+    /*****************************************************************/
+    /*                         base_fstream                          */
+    /*****************************************************************/
+
+    base_fstream::base_fstream (PHYSFS_File* file) : file(file) {
+        if (file == NULL) {
+            throw std::invalid_argument("attempted to construct fstream with NULL ptr");
+        }
+    }
+
+    base_fstream::~base_fstream (void) {
+        PHYSFS_close(file);
+    }
+
+    size_t base_fstream::length() {
+        return PHYSFS_fileLength(file);
+    }
+
+    PHYSFS_File* openWithMode (char const* filename, mode openMode) {
+        PHYSFS_File* file = NULL;
+        switch (openMode) {
+        case WRITE:
+            file = PHYSFS_openWrite(filename);
+            break;
+        case APPEND:
+            file = PHYSFS_openAppend(filename);
+            break;
+        case READ:
+            file = PHYSFS_openRead(filename);
+        }
+        if (file == NULL) {
+            throw std::invalid_argument("file not found: " + std::string(filename));
+        }
+        return file;
+    }
+
+    /*****************************************************************/
+    /*                           ifstream                            */
+    /*****************************************************************/
+
+    ifstream::ifstream (const std::string& filename) : base_fstream(openWithMode(filename.c_str(), READ)), std::istream(new fbuf(file)) {}
+
+    ifstream::~ifstream (void) {
+        delete rdbuf();
+    }
+}
 
 namespace YUNIK_GTC {
     /*****************************************************************/
@@ -97,4 +237,12 @@ namespace YUNIK_GTC {
     ArchiveFileError ArchiveFile::failure (void) {
         return err;
     }
+
+    /*****************************************************************/
+    /*                           ifstream                            */
+    /*****************************************************************/
+
+    ifstream::ifstream (const std::string& filename) : PhysFS::ifstream(filename) {}
+
+    ifstream::~ifstream (void) {}
 }
