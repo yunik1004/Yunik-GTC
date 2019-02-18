@@ -1,10 +1,10 @@
 #pragma once
 
 namespace YUNIK_GTC {
-    class ObjectFile {
+    class ModelOBJ {
     private:
     public:
-        ObjectFile (void);
-        ~ObjectFile (void);
+        ModelOBJ (void);
+        ~ModelOBJ (void);
     };
 }

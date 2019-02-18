@@ -31,7 +31,7 @@ namespace YUNIK_GTC {
         ArchiveFileEOF
     };
 
-    ImageFile::ImageFile (const char* aFilePath) {
+    Image::Image (const char* aFilePath) {
         ArchiveFile* aFile = new ArchiveFile(aFilePath);
         err = aFile->failure();
         if (err == ArchiveFileError::FILE_NO_ERROR) {
@@ -40,25 +40,25 @@ namespace YUNIK_GTC {
         delete aFile;
     }
 
-    ImageFile::~ImageFile (void) {
+    Image::~Image (void) {
         if (image != nullptr) {
             stbi_image_free(image);
         }
     }
 
-    int ImageFile::getWidth (void) {
+    int Image::getWidth (void) {
         return width;
     }
 
-    int ImageFile::getHeight (void) {
+    int Image::getHeight (void) {
         return height;
     }
 
-    unsigned char* ImageFile::getImage (void) {
+    unsigned char* Image::getImage (void) {
         return image;
     }
 
-    ArchiveFileError ImageFile::failure (void) {
+    ArchiveFileError Image::failure (void) {
         return err;
     }
 }

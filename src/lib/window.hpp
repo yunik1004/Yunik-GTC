@@ -16,7 +16,7 @@ namespace YUNIK_GTC {
 
         GLFWwindow* window = nullptr;
         GLFWimage windowIcon;
-        ImageFile* windowIconImage = nullptr;
+        Image* windowIconImage = nullptr;
 
     public:
         Window (const char* name = YUNIK_GTC_DEFAULT_WINDOW_NAME,

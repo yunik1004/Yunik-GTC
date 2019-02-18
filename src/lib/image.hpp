@@ -3,7 +3,7 @@
 #include "filesys.hpp"
 
 namespace YUNIK_GTC {
-    class ImageFile {
+    class Image {
     private:
         int width;
         int height;
@@ -11,8 +11,8 @@ namespace YUNIK_GTC {
         unsigned char* image = nullptr;
         ArchiveFileError err;
     public:
-        ImageFile (const char* aFilePath);
-        ~ImageFile (void);
+        Image (const char* aFilePath);
+        ~Image (void);
 
         int getWidth (void);
         int getHeight (void);

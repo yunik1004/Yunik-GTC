@@ -5,7 +5,7 @@
 #include <tiny_obj_loader.h>
 
 namespace YUNIK_GTC {
-    ObjectFile::ObjectFile () {
+    ModelOBJ::ModelOBJ () {
         tinyobj::attrib_t attrib;
         std::vector<tinyobj::shape_t> shapes;
         std::vector<tinyobj::material_t> materials;
@@ -17,7 +17,7 @@ namespace YUNIK_GTC {
         bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, &a);
     }
 
-    ObjectFile::~ObjectFile () {
+    ModelOBJ::~ModelOBJ () {
         //
     }
 }

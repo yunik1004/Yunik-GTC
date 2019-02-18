@@ -142,7 +142,7 @@ namespace YUNIK_GTC {
     }
 
     bool Window::setWindowIcon (const char* filePath) {
-        windowIconImage = new ImageFile(filePath);
+        windowIconImage = new Image(filePath);
         windowIcon.width = windowIconImage->getWidth();
         windowIcon.height = windowIconImage->getHeight();
         windowIcon.pixels = windowIconImage->getImage();
