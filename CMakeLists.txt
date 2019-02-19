@@ -43,9 +43,6 @@ ENDIF ()
 ADD_SUBDIRECTORY (${YUNIK_GTC_SUBMODULES_DIR}/soloud/contrib soloud EXCLUDE_FROM_ALL)
 INCLUDE_DIRECTORIES (${YUNIK_GTC_SUBMODULES_DIR}/soloud/include)
 
-# tinyobjloader
-ADD_SUBDIRECTORY (${YUNIK_GTC_SUBMODULES_DIR}/tinyobjloader tinyobjloader EXCLUDE_FROM_ALL)
-
 # stb
 INCLUDE_DIRECTORIES (${YUNIK_GTC_SUBMODULES_DIR}/stb)
 
@@ -91,7 +88,6 @@ TARGET_LINK_LIBRARIES (${YUNIK_GTC_TARGET}
     glew_s
     glm
     soloud
-    tinyobjloader
     physfs-static
     assimp
 )
