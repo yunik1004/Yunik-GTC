@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <cstdlib>
 #include <filesystem>
+#include <sstream>
 #include <stdexcept>
 #include <streambuf>
 #include "../settings.hpp"
@@ -245,4 +246,21 @@ namespace YUNIK_GTC {
     ifstream::ifstream (const std::string& filename) : PhysFS::ifstream(filename) {}
 
     ifstream::~ifstream (void) {}
+
+    /*****************************************************************/
+    /*                       getFileContents                         */
+    /*****************************************************************/
+
+    char* getFileContents (const char* aFilePath) {
+        ifstream file(aFilePath);
+        std::stringstream fs;
+        fs << file.rdbuf();
+
+        std::string contents_string(fs.str());
+        char* contents = new char[contents_string.size() + 1];
+        std::copy(contents_string.begin(), contents_string.end(), contents);
+        contents[contents_string.size()] = '\0';
+
+        return contents;
+    }
 }

@@ -7,7 +7,7 @@ namespace YUNIK_GTC {
     private:
         GLuint shader;
     public:
-        Shader (const GLchar* shaderSrc, const GLenum shaderType);
+        Shader (const char* shaderSrcPath, const GLenum shaderType);
         ~Shader (void);
         GLuint getShader (void);
     };
@@ -16,8 +16,10 @@ namespace YUNIK_GTC {
     private:
         GLuint program;
     public:
-        ShaderProgram (const GLchar *shaderSrc_vertex, const GLchar *shaderSrc_fragment);
+        ShaderProgram (const char* shaderSrcPath_vertex, const char* shaderSrcPath_fragment);
         ~ShaderProgram (void);
         GLuint getProgram (void);
+
+        void use (void);
     };
 }

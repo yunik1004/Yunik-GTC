@@ -59,4 +59,6 @@ namespace YUNIK_GTC {
         ifstream (std::string const& filename);
         virtual ~ifstream (void);
     };
+
+    char* getFileContents (const char* aFilePath);
 }

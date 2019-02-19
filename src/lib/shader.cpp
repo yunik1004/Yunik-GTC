@@ -1,15 +1,28 @@
 #include "shader.hpp"
 #include <iostream>
+#include "filesys.hpp"
+
+#define YUNIK_GTC_INFOLOG_SIZE 512
 
 namespace YUNIK_GTC {
     /*****************************************************************/
     /*                             Shader                            */
     /*****************************************************************/
 
-    Shader::Shader (const GLchar* shaderSrc, const GLenum shaderType) {
+    Shader::Shader (const char* shaderSrcPath, const GLenum shaderType) {
+        const char* shaderSrc = (const char*)getFileContents(shaderSrcPath);
         shader = glCreateShader(shaderType);
         glShaderSource(shader, 1, &shaderSrc, NULL);
         glCompileShader(shader);
+
+        // Compile check
+        int success;
+        char infoLog[YUNIK_GTC_INFOLOG_SIZE];
+        glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
+        if (!success) {
+            glGetShaderInfoLog(shader, YUNIK_GTC_INFOLOG_SIZE, NULL, infoLog);
+            std::cerr << "Error: Shader '" << shaderSrcPath << "' compilation failed\n" << infoLog << std::endl;
+        }
     }
 
     Shader::~Shader (void) {
@@ -24,14 +37,23 @@ namespace YUNIK_GTC {
     /*                            Program                            */
     /*****************************************************************/
 
-    ShaderProgram::ShaderProgram (const GLchar *shaderSrc_vertex, const GLchar *shaderSrc_fragment) {
-        Shader* vertexShader = new Shader(shaderSrc_vertex, GL_VERTEX_SHADER);
-        Shader* fragmentShader = new Shader(shaderSrc_fragment, GL_FRAGMENT_SHADER);
+    ShaderProgram::ShaderProgram (const char* shaderSrcPath_vertex, const char* shaderSrcPath_fragment) {
+        Shader* vertexShader = new Shader(shaderSrcPath_vertex, GL_VERTEX_SHADER);
+        Shader* fragmentShader = new Shader(shaderSrcPath_fragment, GL_FRAGMENT_SHADER);
 
         program = glCreateProgram();
         glAttachShader(program, vertexShader->getShader());
         glAttachShader(program, fragmentShader->getShader());
         glLinkProgram(program);
+
+        // Compile check
+        int success;
+        char infoLog[YUNIK_GTC_INFOLOG_SIZE];
+        glGetProgramiv(program, GL_LINK_STATUS, &success);
+        if (!success) {
+            glGetProgramInfoLog(program, YUNIK_GTC_INFOLOG_SIZE, NULL, infoLog);
+            std::cerr << "Error: Shader program link failed\n" << infoLog << std::endl;
+        }
 
         delete vertexShader;
         delete fragmentShader;
@@ -43,5 +65,9 @@ namespace YUNIK_GTC {
 
     GLuint ShaderProgram::getProgram (void) {
         return program;
+    }
+
+    void ShaderProgram::use (void) {
+        glUseProgram(program);
     }
 }

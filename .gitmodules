@@ -19,3 +19,6 @@
 [submodule "submodules/physfs"]
 	path = submodules/physfs
 	url = https://github.com/criptych/physfs.git
+[submodule "submodules/assimp"]
+	path = submodules/assimp
+	url = https://github.com/assimp/assimp.git
