@@ -3,6 +3,7 @@
 #include "../lib/audio.hpp"
 #include "../lib/model.hpp"
 #include "../lib/scene.hpp"
+#include "../lib/shader.hpp"
 
 namespace YUNIK_GTC {
     class mainScene : public Scene {
@@ -11,6 +12,8 @@ namespace YUNIK_GTC {
             //
         }
         AudioWave* wave;
+        Model* model;
+        ShaderProgram* sp;
     public:
         mainScene (void) {
             /* Background color - white */
@@ -21,8 +24,9 @@ namespace YUNIK_GTC {
             if (wave->failure() == ArchiveFileError::FILE_NO_ERROR) {
                 AudioEngine::playBackground(wave);
             }
-            
-            ModelOBJ* mdl = new ModelOBJ();
+
+            model = new Model("model/nanosuit.obj");
+            sp = new ShaderProgram("shader/model.vert", "shader/model.frag");
         }
 
         ~mainScene (void) {
@@ -32,6 +36,7 @@ namespace YUNIK_GTC {
         Scene* update (void) {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             //
+            model->draw(sp);
             return this;
         }
     };

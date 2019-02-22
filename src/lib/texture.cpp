@@ -19,6 +19,7 @@ namespace YUNIK_GTC {
             glGenerateMipmap(GL_TEXTURE_2D);
         }
         delete image;
+        unbind();
     }
 
     Texture::~Texture (void) {
@@ -37,5 +38,9 @@ namespace YUNIK_GTC {
     void Texture::unbind (int textureUnit) {
         glActiveTexture(GL_TEXTURE0 + textureUnit);
         glBindTexture(GL_TEXTURE_2D, 0);
+    }
+
+    void Texture::initActiveTexture (void) {
+        glActiveTexture(GL_TEXTURE0);
     }
 }

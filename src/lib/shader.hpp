@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 #include <GL/glew.h>
 
 namespace YUNIK_GTC {
@@ -21,5 +22,8 @@ namespace YUNIK_GTC {
         GLuint getProgram (void);
 
         void use (void);
+
+        void setInt (const std::string& name, int value);
+        void setFloat (const std::string& name, float value);
     };
 }

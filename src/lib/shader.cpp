@@ -70,4 +70,12 @@ namespace YUNIK_GTC {
     void ShaderProgram::use (void) {
         glUseProgram(program);
     }
+
+    void ShaderProgram::setInt (const std::string& name, int value) {
+        glUniform1i(glGetUniformLocation(program, name.c_str()), value);
+    }
+
+    void ShaderProgram::setFloat (const std::string& name, float value) {
+        glUniform1f(glGetUniformLocation(program, name.c_str()), value);
+    }
 }

@@ -15,5 +15,6 @@ namespace YUNIK_GTC {
 
         void bind (int textureUnit = 0);
         static void unbind (int textureUnit = 0);
+        static void initActiveTexture (void);
     };
 }
